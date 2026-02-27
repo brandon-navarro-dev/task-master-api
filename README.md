@@ -1,6 +1,6 @@
-# Task Master API
+#  Task Master API
 
-## Descripción del Proyecto
+##  Descripción del Proyecto
 
 Task Master API es un servicio REST desarrollado con Django y Django REST Framework.
 
@@ -16,7 +16,7 @@ La autenticación se realiza mediante JWT (JSON Web Tokens).
 
 ---
 
-## Tecnologías Utilizadas
+##  Tecnologías Utilizadas
 
 - Python 3.12
 - Django 5.x
@@ -29,69 +29,66 @@ La autenticación se realiza mediante JWT (JSON Web Tokens).
 
 ##  Instrucciones para Ejecutar el Proyecto
 
-###  1.- Construir y levantar los contenedores
+### 1. Construir y levantar los contenedores
 
 ```bash
 docker compose up --build
+```
 
-### 2.- Aplicar migraciones
-
+### 2. Aplicar migraciones 
 ```bash
 docker compose exec backend python manage.py migrate
+```
 
-### 3.- Crear superusuario
-
+### 3. Crear Superusuario
 ```bash
 docker compose exec backend python manage.py createsuperuser
+```
 
-### La aplicación estará disponible en 
-
+### La aplicación estará disponible en:
+```bash
 http://localhost:8000/
-
----
-
-## Autenticación(JWT)
-###Para poder obtener el TOKEN de acceso 
-
+```
+### 4. Obtener Token de Acceso
 ```bash
 curl -X POST http://localhost:8000/api/token/ \
   -H "Content-Type: application/json" \
   -d '{"username":"usuario","password":"contraseña"}'
 
-##La respuesta esperada 
-```JSON
+#RESPUESTA ESPERADA
 {
   "refresh": "...",
-  "access": "AQUI ESTA EL TOKEN QUE SE USA PARA PODER ACCEDER A LOS ENDPOINTS"
+  "access": "TOKEN_DE_ACCESO"
 }
 
-##Para acceder a los endpoints protegidos
-```Dentro de POSTMAN 
-Authorization: Bearer TU_ACCESS_TOKEN (O la información obtenida en access)
+#Para acceder a endpoints protegidos en postman
 
-### Endpoints Disponibles
-##Tareas
+Authorization: Bearer TU_ACCESS_TOKEN
 
-GET /api/tasks/
 
-POST /api/tasks/
+```
+### 5. Endpoints Disponibles
+Tareas
 
-GET /api/tasks/{id}/
+- GET /api/tasks/
 
-PUT /api/tasks/{id}/
+- POST /api/tasks/
 
-DELETE /api/tasks/{id}/
+- GET /api/tasks/{id}/
+
+- PUT /api/tasks/{id}/
+
+- DELETE /api/tasks/{id}/
 
 Etiquetas
 
-GET /api/tags/
+- GET /api/tags/
 
-POST /api/tags/
+- POST /api/tags/
 
-----
+### 6. Crear tarea con Imagen
+Se debe usar multipart/form-data
 
-###Crear Tarea con Imagen
-##Usa multipart/form-data en POSTMAN
 ```bash
 curl -X POST http://localhost:8000/api/tasks/ \
   -H "Authorization: Bearer TU_ACCESS_TOKEN" \
@@ -101,35 +98,42 @@ curl -X POST http://localhost:8000/api/tasks/ \
   -F "priority=high" \
   -F "image=@./imagen.jpg"
 
-#Si la operación es exitosa, el campo image devolverá una URL similar a:
+#Si la operación es exitossa, el campo image devolverá una URL similar a :
 "image": "/media/tasks/archivo.jpg"
+  ```
 
-###Características Implementadas
+### 7. Características implementadas
+- Autenticación JWT
 
-Autenticación JWT
+- CRUD completo de tareas
 
-CRUD completo de tareas
+- Relación Many-to-Many con etiquetas
 
-Relación Many-to-Many con etiquetas
+- Subida de imágenes (JPG, PNG, WEBP)
 
-Subida de imágenes (JPG, PNG, WEBP)
+- Validación de tamaño máximo (2MB)
 
-Validación de tamaño máximo (2MB)
+- Permisos basados en propietario (owner-based access)
 
-Permisos basados en propietario (owner-based access)
+- Entorno dockerizado
 
-Entorno completamente dockerizado
+### 8. Decisiones Técnicas
 
-### Decisiones Técnicas
+- Se utilizó JWT para mantener autenticación stateless.
 
-Se utilizó JWT para autenticación stateless.
+- Se implementó control de permisos para que cada usuario solo acceda a sus propios recursos.
 
-Se implementó control de permisos para que cada usuario solo pueda acceder a sus propias tareas.
+- Se validó tipo y tamaño de archivo para garantizar seguridad.
 
-Se validó el tipo y tamaño del archivo para garantizar la seguridad en la carga de imágenes.
+- Se utilizó SQLite por simplicidad para la prueba técnica.
 
-Se dockerizó el proyecto para facilitar su ejecución en cualquier entorno.
+### 9. Consideraciones
 
-###Autor
-##Desarrollado por el Ingenierio en Datos e Inteligencia Organizacional: 
-##Brandon González Navarro
+- El proyecto está configurado para entorno local.
+
+- No se incluyó configuración para producción (Nginx, Gunicorn, variables de entorno seguras).
+
+- SQLite se utiliza únicamente para simplificar la ejecución de la prueba.
+
+### Autor
+Desarrollado por el Ingeniero Brandon González Navarro
